@@ -1,7 +1,7 @@
 
 # LSTM-alapú időjárás-előrejelzés európai fővárosok adataiból
 
-Ez a projekt az Óbudai Egyetem mesterséges intelligencia tárgyának keretében készült. Célja egy mélytanuláson alapuló modell megvalósítása, amely több európai főváros meteorológiai adataira támaszkodva képes előre jelezni a napi maximális hőmérsékletet.
+Ez a projekt az Óbudai Egyetem, Mély gépi tanulás tárgyának keretében készült. Célja egy mélytanuláson alapuló modell megvalósítása, amely több európai főváros meteorológiai adataira támaszkodva képes előre jelezni a napi maximális hőmérsékletet.
 
 ## Témaválasztás és cél
 
