@@ -52,16 +52,15 @@ A kiértékelés eredményei `.csv` formátumban elérhetők a `training_log.csv
 
 ```
 oe_deep-ml/
-├── inference/                # Notebook inference futtatásához
-├── logs/                     # Tanulási görbék és metrikák log fájljai
-├── models/                   # Betanított modellek (.pt)
-├── plots/                    # Tanulási görbék ábrái
-├── training_log.csv          # Hyperparaméter-tuning eredményei
-├── worldcities.csv           # Városkoordináták (SimpleMaps)
-├── european_capitals_weather.csv  # Egyesített, feldolgozott adat
-├── met_data.ipynb            # Adatgyűjtés és előkészítés
-├── train.ipynb               # Modell tanítás és logolás
-├── inference.ipynb           # Modell betöltése és előrejelzés
+├── logs/                           # Tanulási görbék és metrikák log fájljai
+├── models/                         # Betanított modellek (.pt)
+├── plots/                          # Tanulási görbék ábrái
+├── training_log.csv                # Hyperparaméter-tuning eredményei
+├── worldcities.csv                 # Városkoordináták (SimpleMaps)
+├── european_capitals_weather.csv   # Egyesített, feldolgozott adat
+├── weather_data_train.ipynb        # Adatgyűjtés és előkészítés & Modell tanítás és logolás
+├── weather_inference.ipynb         # Modell betöltése és előrejelzés
+├── results_analysis.ipynb          # Hyperparaméter-tuning eredményeinek kiértékelése
 ```
 
 ## Főbb tanulságok
