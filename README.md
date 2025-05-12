@@ -1,115 +1,87 @@
 
-# oe_deep-ml
+# LSTM-alapú időjárás-előrejelzés európai fővárosok adataiból
 
-**Időjárás-előrejelzés európai fővárosok meteorológiai adatai alapján mélytanulás segítségével**
+Ez a projekt az Óbudai Egyetem mesterséges intelligencia tárgyának keretében készült. Célja egy mélytanuláson alapuló modell megvalósítása, amely több európai főváros meteorológiai adataira támaszkodva képes előre jelezni a napi maximális hőmérsékletet.
 
-## Tartalomjegyzék
+## Témaválasztás és cél
 
-- [Áttekintés](#áttekintés)
-- [Adatok](#adatok)
-- [Modell](#modell)
-- [Használat](#használat)
-  - [1. Adatgyűjtés és előkészítés](#1-adatgyűjtés-és-előkészítés)
-  - [2. Modell tanítása](#2-modell-tanítása)
-  - [3. Modell kiértékelése és vizualizáció](#3-modell-kiértékelése-és-vizualizáció)
-  - [4. Inference](#4-inference)
-- [Fájlstruktúra](#fájlstruktúra)
-- [Követelmények](#követelmények)
-- [Licenc](#licenc)
+A projekt célja egy meglévő nyílt meteorológiai adathalmaz felhasználásával egy előrejelző pipeline létrehozása LSTM-alapú modell segítségével. A feladat kiterjed:
+- a nyers adat lekérdezésére és feldolgozására,
+- időalapú jellemzők előkészítésére több város adatai alapján,
+- tanító és validációs készletek létrehozására időablakos szekvenciák formájában,
+- egy LSTM modell tanítására és optimalizálására,
+- a modell értékelésére és vizualizálására.
 
-## Áttekintés
+## Adatforrás
 
-Ez a projekt célja, hogy mélytanulási módszerekkel (LSTM) előrejelezze az európai fővárosok napi átlaghőmérsékletét. A modell különböző meteorológiai jellemzők alapján tanul, mint például a minimum, maximum hőmérséklet, csapadék és szélsebesség.
+- Az adatok a [Meteostat](https://dev.meteostat.net/) nyilvános API-ján keresztül kerültek lekérdezésre.
+- Az adatok napi felbontásúak, az alábbi jellemzőket tartalmazzák:
+  - napi átlaghőmérséklet (`tavg`)
+  - minimum hőmérséklet (`tmin`)
+  - maximum hőmérséklet (`tmax`)
+  - csapadék (`prcp`)
+  - szélsebesség (`wspd`)
 
-## Adatok
+Az adatok csak akkor kerültek felhasználásra, ha a teljes vizsgált időintervallumban (2000–2024) hiánytalanul elérhetők voltak az adott városra és jellemzőre.
 
-- **Forrás**: [meteostat](https://dev.meteostat.net/)
-- **Városok**: Európai fővárosok
-- **Időszak**: 2010–2024
-- **Jellemzők**:
-  - `tavg`: napi átlaghőmérséklet
-  - `tmin`: napi minimum hőmérséklet
-  - `tmax`: napi maximum hőmérséklet
-  - `prcp`: napi csapadék
-  - `wspd`: napi átlagos szélsebesség
+## Modell és pipeline
 
-## Modell
+- A megvalósítás LSTM (Long Short-Term Memory) neurális hálózaton alapul.
+- A bemeneti adatok több európai főváros több jellemzőjéből épülnek fel, időablakos szekvenciák formájában.
+- A célváltozó a `tmax` érték előrejelzése egy kiválasztott városra.
 
-- **Architektúra**: LSTM
-- **Hyperparaméterek**:
-  - `hidden_size`: 16, 32, 64, 128
-  - `num_layers`: 1 vagy 2
-  - `batch_size`: 64–4096
-  - `learning_rate`: 0.0001–0.003
-- **Célváltozó**: `tavg` (napi átlaghőmérséklet)
+### Modell paraméterei
+- `hidden_size`: 16–128
+- `batch_size`: 64–4096
+- `learning_rate`: 0.0001–0.003
+- `num_layers`: 1 vagy 2
+- `window_size`: 7 nap
 
-## Használat
+A tanítás során early stopping-et és tanulási görbék mentését használtuk.
 
-### 1. Adatgyűjtés és előkészítés
+## Kiértékelés
 
-```bash
-pip install -r requirements.txt
-```
+A modellek összehasonlítása több metrika alapján történt:
+- **Mean Absolute Error (MAE)**
+- **Mean Squared Error (MSE)**
+- tanulási idő (másodpercben)
 
-```python
-from met_data import prepare_data
-prepare_data()
-```
+A kiértékelés eredményei `.csv` formátumban elérhetők a `training_log.csv` fájlban, valamint az egyes epoch-okra vonatkozó tanulási görbék is naplózva vannak.
 
-### 2. Modell tanítása
-
-```python
-from train import train_model
-train_model()
-```
-
-### 3. Modell kiértékelése és vizualizáció
-
-```python
-from visualize import plot_learning_curves
-plot_learning_curves()
-```
-
-### 4. Inference
-
-```python
-from inference import predict
-predict()
-```
-
-## Fájlstruktúra
+## Projektfelépítés
 
 ```
 oe_deep-ml/
-├── data/
-│   ├── raw/
-│   └── processed/
-├── models/
-├── logs/
-├── notebooks/
-│   ├── met_data.ipynb
-│   ├── train.ipynb
-│   ├── visualize.ipynb
-│   └── inference.ipynb
-├── scripts/
-│   ├── met_data.py
-│   ├── train.py
-│   ├── visualize.py
-│   └── inference.py
-├── requirements.txt
-└── README.md
+├── inference/                # Notebook inference futtatásához
+├── logs/                     # Tanulási görbék és metrikák log fájljai
+├── models/                   # Betanított modellek (.pt)
+├── plots/                    # Tanulási görbék ábrái
+├── training_log.csv          # Hyperparaméter-tuning eredményei
+├── worldcities.csv           # Városkoordináták (SimpleMaps)
+├── european_capitals_weather.csv  # Egyesített, feldolgozott adat
+├── met_data.ipynb            # Adatgyűjtés és előkészítés
+├── train.ipynb               # Modell tanítás és logolás
+├── inference.ipynb           # Modell betöltése és előrejelzés
 ```
+
+## Főbb tanulságok
+
+- A `batch_size` és `learning_rate` értékek optimalizálása nagy hatással van az eredményre.
+- A túl nagy rejtett rétegek túltanuláshoz és gyenge generalizációhoz vezettek.
+- A `tmax` célváltozó standardizálása torzított előrejelzést eredményezett, ezért a végső modell már az eredeti skálán tanult.
+- A tanulási görbék és korai leállás (early stopping) segítettek a túltanulás elkerülésében.
 
 ## Követelmények
 
 - Python 3.10+
-- PyTorch
-- pandas
 - numpy
+- pandas
+- torch
 - matplotlib
 - scikit-learn
 - meteostat
+- geopy
 
 ## Licenc
 
-Ez a projekt az MIT licenc alatt áll. Részletekért lásd a [LICENSE](LICENSE) fájlt.
+MIT licenc — szabadon felhasználható oktatási és kutatási célra.
