@@ -1,0 +1,24 @@
+data/Amsterdam.csv
+data/Andorra la Vella.csv
+data/Athens.csv
+data/Berlin.csv
+data/Bern.csv
+data/Brussels.csv
+data/Bucharest.csv
+data/Budapest.csv
+data/Dublin.csv
+data/Kyiv.csv
+data/London.csv
+data/Luxembourg.csv
+data/Madrid.csv
+data/Moscow.csv
+data/Paris.csv
+data/Prague.csv
+data/Rome.csv
+data/Sarajevo.csv
+data/Skopje.csv
+data/Sofia.csv
+data/Stockholm.csv
+data/Tirana.csv
+european_capitals_weather_combined.csv
+*.pkl
