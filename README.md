@@ -31,11 +31,11 @@ Az adatok csak akkor kerültek felhasználásra, ha a teljes vizsgált időinter
 - A célváltozó a `tmax` érték előrejelzése egy kiválasztott városra.
 
 ### Modell paraméterei
-- `hidden_size`: 16–128
-- `batch_size`: 64–4096
-- `learning_rate`: 0.0001–0.003
-- `num_layers`: 1 vagy 2
-- `window_size`: 7 nap
+- `hidden_size`: 16–128         (ajánlott: 32)
+- `batch_size`: 64–4096         (ajánlott: 1024)
+- `learning_rate`: 0.0001–0.003 (ajánlott: 0.001)
+- `num_layers`: 1 vagy 2        (ajánlott: 1)
+- `window_size`: 7 nap          (nem vizsgáltuk különbözőkkel)
 
 A tanítás során early stopping-et és tanulási görbék mentését használtuk.
 
@@ -47,6 +47,10 @@ A modellek összehasonlítása több metrika alapján történt:
 - tanulási idő (másodpercben)
 
 A kiértékelés eredményei `.csv` formátumban elérhetők a `training_log.csv` fájlban, valamint az egyes epoch-okra vonatkozó tanulási görbék is naplózva vannak.
+
+![All_training](https://github.com/MarkAttila420/oe_deep-ml/blob/main/plots/all_training_curves.png)
+![Top3_training](https://github.com/MarkAttila420/oe_deep-ml/blob/main/plots/top3_training_curves.png)
+
 
 ## Projektfelépítés
 
@@ -69,6 +73,16 @@ oe_deep-ml/
 - A túl nagy rejtett rétegek túltanuláshoz és gyenge generalizációhoz vezettek.
 - A `tmax` célváltozó standardizálása torzított előrejelzést eredményezett, ezért a végső modell már az eredeti skálán tanult.
 - A tanulási görbék és korai leállás (early stopping) segítettek a túltanulás elkerülésében.
+
+## Eredmény
+
+- Train Loss:                   4.497498
+- Mean Absolute Error (MAE):    2.054539
+- Mean Squared Error (MSE):     6.802113
+- Tanulási idő (másodpercben):  30.13 s
+- 
+![Result](https://github.com/MarkAttila420/oe_deep-ml/blob/main/Result.png)
+
 
 ## Követelmények
 
