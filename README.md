@@ -80,7 +80,7 @@ oe_deep-ml/
 - Mean Absolute Error (MAE):    2.054539
 - Mean Squared Error (MSE):     6.802113
 - Tanulási idő (másodpercben):  30.13 s
-- 
+
 ![Result](https://github.com/MarkAttila420/oe_deep-ml/blob/main/Result.png)
 
 
