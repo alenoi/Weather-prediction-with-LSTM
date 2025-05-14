@@ -1,90 +1,89 @@
 
-# LSTM-alapú időjárás-előrejelzés európai fővárosok adataiból
+# LSTM-based Weather Forecasting from European Capital City Data
 
-Ez a projekt az Óbudai Egyetem, Mély gépi tanulás tárgyának keretében készült. Célja egy mélytanuláson alapuló modell megvalósítása, amely több európai főváros meteorológiai adataira támaszkodva képes előre jelezni a napi maximális hőmérsékletet.
+This project was created as part of the Deep Machine Learning course at Óbuda University. Its goal is to implement a deep learning model that, based on meteorological data from several European capitals, can predict the daily maximum temperature.
 
-## Témaválasztás és cél
+## Topic selection and objective
 
-A projekt célja egy meglévő nyílt meteorológiai adathalmaz felhasználásával egy előrejelző pipeline létrehozása LSTM-alapú modell segítségével. A feladat kiterjed:
-- a nyers adat lekérdezésére és feldolgozására,
-- időalapú jellemzők előkészítésére több város adatai alapján,
-- tanító és validációs készletek létrehozására időablakos szekvenciák formájában,
-- egy LSTM modell tanítására és optimalizálására,
-- a modell értékelésére és vizualizálására.
+The aim of the project is to create a forecasting pipeline using an LSTM-based model with the help of an existing open meteorological dataset. The task includes:
+- querying and processing raw data,
+- preparing time-based features based on data from multiple cities,
+- creating training and validation sets in the form of time-windowed sequences,
+- training and optimizing an LSTM model,
+- evaluating and visualizing the model.
 
-## Adatforrás
+## Data source
 
-- Az adatok a [Meteostat](https://dev.meteostat.net/) nyilvános API-ján keresztül kerültek lekérdezésre.
-- Az adatok napi felbontásúak, az alábbi jellemzőket tartalmazzák:
-  - napi átlaghőmérséklet (`tavg`)
-  - minimum hőmérséklet (`tmin`)
-  - maximum hőmérséklet (`tmax`)
-  - csapadék (`prcp`)
-  - szélsebesség (`wspd`)
+- The data was queried via the public API of [Meteostat](https://dev.meteostat.net/).
+- The data has daily resolution and includes the following features:
+  - daily average temperature (`tavg`)
+  - minimum temperature (`tmin`)
+  - maximum temperature (`tmax`)
+  - precipitation (`prcp`)
+  - wind speed (`wspd`)
 
-Az adatok csak akkor kerültek felhasználásra, ha a teljes vizsgált időintervallumban (2000–2024) hiánytalanul elérhetők voltak az adott városra és jellemzőre.
+Data was only used if it was fully available for the given city and feature throughout the entire examined time interval (2000–2024).
 
-## Modell és pipeline
+## Model and pipeline
 
-- A megvalósítás LSTM (Long Short-Term Memory) neurális hálózaton alapul.
-- A bemeneti adatok több európai főváros több jellemzőjéből épülnek fel, időablakos szekvenciák formájában.
-- A célváltozó a `tmax` érték előrejelzése egy kiválasztott városra.
+- The implementation is based on an LSTM (Long Short-Term Memory) neural network.
+- The input data consists of multiple features from several European capitals, in the form of time-windowed sequences.
+- The target variable is the prediction of the `tmax` value for a selected city.
 
-### Modell paraméterei
-- `hidden_size`: 16–128         (ajánlott: 32)
-- `batch_size`: 64–4096         (ajánlott: 1024)
-- `learning_rate`: 0.0001–0.003 (ajánlott: 0.001)
-- `num_layers`: 1 vagy 2        (ajánlott: 1)
-- `window_size`: 7 nap          (nem vizsgáltuk különbözőkkel)
+### Model parameters
+- `hidden_size`: 16–128         (recommended: 32)
+- `batch_size`: 64–4096         (recommended: 1024)
+- `learning_rate`: 0.0001–0.003 (recommended: 0.001)
+- `num_layers`: 1 or 2          (recommended: 1)
+- `window_size`: 7 days         (not tested with other values)
 
-A tanítás során early stopping-et és tanulási görbék mentését használtuk.
+Early stopping and saving of training curves were used during training.
 
-## Kiértékelés
+## Evaluation
 
-A modellek összehasonlítása több metrika alapján történt:
+Models were compared based on several metrics:
 - **Mean Absolute Error (MAE)**
 - **Mean Squared Error (MSE)**
-- tanulási idő (másodpercben)
+- training time (in seconds)
 
-A kiértékelés eredményei `.csv` formátumban elérhetők a `training_log.csv` fájlban, valamint az egyes epoch-okra vonatkozó tanulási görbék is naplózva vannak.
+The evaluation results are available in `.csv` format in the `training_log.csv` file, and the training curves for each epoch are also logged.
 
-![All_training](https://github.com/MarkAttila420/oe_deep-ml/blob/main/plots/all_training_curves.png)
-![Top3_training](https://github.com/MarkAttila420/oe_deep-ml/blob/main/plots/top3_training_curves.png)
+![All_training](https://github.com/alenoi/Weather-prediction-with-LSTM/blob/main/plots/all_training_curves.png)
+![Top3_training](https://github.com/alenoi/Weather-prediction-with-LSTM/blob/main/plots/top3_training_curves.png)
 
+## Project structure
 
-## Projektfelépítés
 
 ```
 oe_deep-ml/
-├── logs/                           # Tanulási görbék és metrikák log fájljai
-├── models/                         # Betanított modellek (.pt)
-├── plots/                          # Tanulási görbék ábrái
-├── training_log.csv                # Hyperparaméter-tuning eredményei
-├── worldcities.csv                 # Városkoordináták (SimpleMaps)
-├── european_capitals_weather.csv   # Egyesített, feldolgozott adat
-├── weather_data_train.ipynb        # Adatgyűjtés és előkészítés & Modell tanítás és logolás
-├── weather_inference.ipynb         # Modell betöltése és előrejelzés
-├── results_analysis.ipynb          # Hyperparaméter-tuning eredményeinek kiértékelése
+├── logs/ # Log files for training curves and metrics
+├── models/ # Trained models (.pt)
+├── plots/ # Plots of training curves
+├── training_log.csv # Hyperparameter tuning results
+├── worldcities.csv # City coordinates (SimpleMaps)
+├── european_capitals_weather.csv # Merged, processed data
+├── weather_data_train.ipynb # Data collection and preparation & model training and logging
+├── weather_inference.ipynb # Model loading and inference
+├── results_analysis.ipynb # Evaluation of hyperparameter tuning results
 ```
 
-## Főbb tanulságok
+## Key takeaways
 
-- A `batch_size` és `learning_rate` értékek optimalizálása nagy hatással van az eredményre.
-- A túl nagy rejtett rétegek túltanuláshoz és gyenge generalizációhoz vezettek.
-- A `tmax` célváltozó standardizálása torzított előrejelzést eredményezett, ezért a végső modell már az eredeti skálán tanult.
-- A tanulási görbék és korai leállás (early stopping) segítettek a túltanulás elkerülésében.
+- Optimization of `batch_size` and `learning_rate` has a significant impact on performance.
+- Too large hidden layers led to overfitting and poor generalization.
+- Standardizing the `tmax` target variable caused biased predictions, so the final model was trained on the original scale.
+- Training curves and early stopping helped avoid overfitting.
 
-## Eredmény
+## Result
 
-- Train Loss:                   4.497498
-- Mean Absolute Error (MAE):    2.054539
-- Mean Squared Error (MSE):     6.802113
-- Tanulási idő (másodpercben):  30.13 s
+- Train Loss:                   4.497498  
+- Mean Absolute Error (MAE):    2.054539  
+- Mean Squared Error (MSE):     6.802113  
+- Training time (in seconds):   30.13 s  
 
-![Result](https://github.com/MarkAttila420/oe_deep-ml/blob/main/Result.png)
+![Result](https://github.com/alenoi/Weather-prediction-with-LSTM/blob/main/Result.png?raw=true)
 
-
-## Követelmények
+## Requirements
 
 - Python 3.10+
 - numpy
@@ -95,6 +94,6 @@ oe_deep-ml/
 - meteostat
 - geopy
 
-## Licenc
+## License
 
-MIT licenc — szabadon felhasználható oktatási és kutatási célra.
+MIT License — freely usable for educational and research purposes.
