@@ -1,5 +1,5 @@
 
-# LSTM-based Weather Forecasting from European Capital City Data
+# Weather Forecasting with LSTM-based neural network
 
 This project was created as part of the Deep Machine Learning course at Óbuda University. Its goal is to implement a deep learning model that, based on meteorological data from several European capitals, can predict the daily maximum temperature.
 
